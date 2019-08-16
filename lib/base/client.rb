@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative 'models/crop'
+require_relative 'models/resize'
+
 require_relative 'endpoint'
 require_relative 'endpoints/passwords'
 require_relative 'endpoints/sessions'

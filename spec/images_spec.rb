@@ -88,6 +88,23 @@ describe Base do
         .image_url('image_id')
         .should eq('https://api.base-api.io/v1/images/image_id/version?')
     end
+
+    it 'returns the process url of the image with parameters' do
+      client =
+        Base::Client.new(access_token: 'access_token')
+
+      client
+        .images
+        .image_url('image_id', quality: 80,
+                               format: 'jpg',
+                               resize: Base::Resize.new(width: 100,
+                                                        height: 100),
+                               crop: Base::Crop.new(height: 2,
+                                                    width: 1,
+                                                    left: 4,
+                                                    top: 3))
+        .should eq('https://api.base-api.io/v1/images/image_id/version?quality=80&format=jpg&resize=100_100&crop=1_2_4_3')
+    end
   end
 
   context 'Delete Image' do
