@@ -1,5 +1,7 @@
 # Base
 
+[![Gem Version](https://badge.fury.io/rb/base-api-io.svg)](https://badge.fury.io/rb/base-api-io)
+
 Ruby client for the [Base API](https://www.base-api.io) service, with it you
 can manage authentication, email sending, files and images of your application.
 
