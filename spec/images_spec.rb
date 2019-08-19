@@ -19,8 +19,14 @@ describe Base do
       client =
         Base::Client.new(access_token: 'access_token')
 
+      tempfile =
+        Tempfile.new
+
       image =
-        client.images.create(image: Tempfile.new)
+        client.images.create(
+          filename: 'test.png',
+          path: tempfile.path,
+          type: 'image/png')
 
       image.name.should eq('test.png')
       image.height.should eq(100)

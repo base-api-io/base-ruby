@@ -34,6 +34,9 @@ module Base
           "#{url}/v1/#{path}/",
           headers: { 'Authorization' => "Bearer #{access_token}" }
         ) do |conn|
+          conn.request :multipart
+          conn.request :url_encoded
+
           conn.use RaiseError
           conn.use Faraday::Adapter::NetHttp
         end

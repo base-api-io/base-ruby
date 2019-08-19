@@ -11,10 +11,13 @@ module Base
       end
 
       # Uploads the given file and returns its metadata.
-      def create(file:)
+      def create(path:, type:, filename:)
         request do
+          io =
+            Faraday::UploadIO.new(path, type, filename)
+
           response =
-            connection.post('', 'file' => file)
+            connection.post('', 'file' => io)
 
           parse(response.body)
         end

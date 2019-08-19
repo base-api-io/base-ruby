@@ -14,10 +14,13 @@ module Base
       #
       # Only images with ImageMagick understands can be uploaded otherwise it
       # will raise an error.
-      def create(image:)
+      def create(path:, type:, filename:)
         request do
+          io =
+            Faraday::UploadIO.new(path, type, filename)
+
           response =
-            connection.post('', 'image' => image)
+            connection.post('', 'image' => io)
 
           parse(response.body)
         end

@@ -18,8 +18,14 @@ describe Base do
       client =
         Base::Client.new(access_token: 'access_token')
 
+      tempfile =
+        Tempfile.new
+
       file =
-        client.files.create(file: Tempfile.new)
+        client.files.create(
+          filename: 'test.text',
+          path: tempfile.path,
+          type: 'text/plain')
 
       file.extension.should eq('png')
       file.name.should eq('test.png')
