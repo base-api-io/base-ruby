@@ -112,7 +112,10 @@ download files:
 ```ruby
 # Create a file
 file =
-  client.files.create(file: File.open("/path/to/file"))
+  client.files.create(
+    path: '/path/to/file',
+    filename: 'text.txt',
+    type: 'text/plain')
 
 # Get a file by id
 file =
@@ -139,7 +142,10 @@ process images:
 ```ruby
 # Create an image
 image =
-  client.images.create(image: File.open("/path/to/image"))
+  client.images.create(
+    path: '/path/to/image',
+    filename: 'image.png',
+    type: 'image/png')
 
 # Get a image by id
 image =
