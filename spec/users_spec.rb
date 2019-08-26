@@ -1,6 +1,34 @@
 # frozen_string_literal: true
 
 describe Base do
+  context 'Listing Users' do
+    it 'returns a list of users' do
+      WebMock
+        .stub_request(:get, 'https://api.base-api.io/v1/users/?page=1&per_page=10')
+        .to_return(
+          body: {
+            items: [{
+              created_at: Time.now.rfc2822,
+              email: 'test@user.com',
+              id: 'id'
+            }],
+            metadata: {
+              count: 1
+            }
+          }.to_json
+        )
+
+      client =
+        Base::Client.new(access_token: 'access_token')
+
+      data =
+        client.users.list
+
+      data.metadata.count.should eq(1)
+      data.items.length.should eq(1)
+    end
+  end
+
   context 'Create User' do
     it 'creates a user' do
       WebMock

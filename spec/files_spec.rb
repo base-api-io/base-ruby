@@ -1,6 +1,36 @@
 # frozen_string_literal: true
 
 describe Base do
+  context 'Listing Files' do
+    it 'returns a list of files' do
+      WebMock
+        .stub_request(:get, 'https://api.base-api.io/v1/files/?page=1&per_page=10')
+        .to_return(
+          body: {
+            items: [{
+              created_at: Time.now.rfc2822,
+              extension: 'png',
+              name: 'test.png',
+              size: 100,
+              id: 'id'
+            }],
+            metadata: {
+              count: 1
+            }
+          }.to_json
+        )
+
+      client =
+        Base::Client.new(access_token: 'access_token')
+
+      data =
+        client.files.list
+
+      data.metadata.count.should eq(1)
+      data.items.length.should eq(1)
+    end
+  end
+
   context 'Create File' do
     it 'creates a file' do
       WebMock
@@ -25,7 +55,8 @@ describe Base do
         client.files.create(
           filename: 'test.text',
           path: tempfile.path,
-          type: 'text/plain')
+          type: 'text/plain'
+        )
 
       file.extension.should eq('png')
       file.name.should eq('test.png')

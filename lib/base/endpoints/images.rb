@@ -10,6 +10,16 @@ module Base
         super
       end
 
+      # Lists the files of a project
+      def list(page: 1, per_page: 10)
+        request do
+          response =
+            connection.get('', per_page: per_page, page: page)
+
+          parse(response.body)
+        end
+      end
+
       # Uploads the given image and returns its metadata.
       #
       # Only images with ImageMagick understands can be uploaded otherwise it

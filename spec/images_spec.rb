@@ -1,6 +1,37 @@
 # frozen_string_literal: true
 
 describe Base do
+  context 'Listing Images' do
+    it 'returns a list of images' do
+      WebMock
+        .stub_request(:get, 'https://api.base-api.io/v1/images/?page=1&per_page=10')
+        .to_return(
+          body: {
+            items: [{
+              created_at: Time.now.rfc2822,
+              name: 'test.png',
+              width: 100,
+              height: 100,
+              size: 100,
+              id: 'id'
+            }],
+            metadata: {
+              count: 1
+            }
+          }.to_json
+        )
+
+      client =
+        Base::Client.new(access_token: 'access_token')
+
+      data =
+        client.images.list
+
+      data.metadata.count.should eq(1)
+      data.items.length.should eq(1)
+    end
+  end
+
   context 'Create Image' do
     it 'creates an image' do
       WebMock
@@ -26,7 +57,8 @@ describe Base do
         client.images.create(
           filename: 'test.png',
           path: tempfile.path,
-          type: 'image/png')
+          type: 'image/png'
+        )
 
       image.name.should eq('test.png')
       image.height.should eq(100)
