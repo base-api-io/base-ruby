@@ -21,12 +21,25 @@ module Base
       end
 
       # Creates a user with the given credentials.
-      def create(email:, password:, confirmation:)
+      def create(email:, password:, confirmation:, custom_data: nil)
         request do
           response =
             connection.post('',
                             'confirmation' => confirmation,
+                            'custom_data' => custom_data,
                             'password' => password,
+                            'email' => email)
+
+          parse(response.body)
+        end
+      end
+
+      # Updates a user with the given data.
+      def update(id:, email:, custom_data: nil)
+        request do
+          response =
+            connection.post(id,
+                            'custom_data' => custom_data,
                             'email' => email)
 
           parse(response.body)

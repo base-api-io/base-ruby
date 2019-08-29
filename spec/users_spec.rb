@@ -37,6 +37,7 @@ describe Base do
           body: {
             created_at: Time.now.rfc2822,
             email: 'test@user.com',
+            custom_data: 'test',
             id: 'id'
           }.to_json
         )
@@ -48,7 +49,37 @@ describe Base do
         client.users.create(
           email: 'test@user.com',
           confirmation: '12345',
+          custom_data: 'test',
           password: '12345'
+        )
+
+      user.email.should eq('test@user.com')
+      user.created_at.should be_a(Time)
+      user.id.should eq('id')
+    end
+  end
+
+  context 'Update User' do
+    it 'updates a user' do
+      WebMock
+        .stub_request(:post, 'https://api.base-api.io/v1/users/user_id')
+        .to_return(
+          body: {
+            created_at: Time.now.rfc2822,
+            email: 'test@user.com',
+            custom_data: 'test',
+            id: 'id'
+          }.to_json
+        )
+
+      client =
+        Base::Client.new(access_token: 'access_token')
+
+      user =
+        client.users.update(
+          id: 'user_id',
+          email: 'test@user.com',
+          custom_data: 'test'
         )
 
       user.email.should eq('test@user.com')
