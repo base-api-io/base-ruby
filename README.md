@@ -69,11 +69,23 @@ user =
   client.users.create(
     email: "test@user.com",
     confirmation: "12345",
-    password: "12345")
+    password: "12345",
+    custom_data: {
+      age: 32
+    })
 
 # Get a users details by the id
 user =
   client.users.get("user_id")
+
+# Update a users email or custom_data
+user =
+  client.users.update(
+    id: "user_id",
+    email: "test@user.com",
+    custom_data: {
+      age: 32
+    })
 
 # Delete a user by id
 user =
