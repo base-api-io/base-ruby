@@ -25,8 +25,8 @@ module Base
         request do
           response =
             connection.post('',
+                            'custom_data' => custom_data.to_json,
                             'confirmation' => confirmation,
-                            'custom_data' => custom_data,
                             'password' => password,
                             'email' => email)
 
@@ -39,7 +39,7 @@ module Base
         request do
           response =
             connection.post(id,
-                            'custom_data' => custom_data,
+                            'custom_data' => custom_data.to_json,
                             'email' => email)
 
           parse(response.body)
