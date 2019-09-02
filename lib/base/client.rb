@@ -4,6 +4,7 @@ require_relative 'models/crop'
 require_relative 'models/resize'
 
 require_relative 'endpoint'
+require_relative 'endpoints/mailing_lists'
 require_relative 'endpoints/passwords'
 require_relative 'endpoints/sessions'
 require_relative 'endpoints/images'
@@ -14,6 +15,9 @@ require_relative 'endpoints/files'
 module Base
   # A client containing all the endpoints.
   class Client
+    # Endpoint for the mailing lists
+    attr_reader :mailing_lists
+
     # Endpoint for the forgot password flow.
     attr_reader :passwords
 
@@ -66,6 +70,12 @@ module Base
 
       @passwords =
         Endpoints::Passwords.new(
+          access_token: access_token,
+          url: url
+        )
+
+      @mailing_lists =
+        Endpoints::MailingLists.new(
           access_token: access_token,
           url: url
         )
