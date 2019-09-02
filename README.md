@@ -36,7 +36,7 @@ Just run this command: `gem install base-api-io`
 
    ```ruby
    client =
-     Base::Client.new(access_token: "your_access_token")
+     Base::Client.new(access_token: 'your_access_token')
    ```
 
 ### Sending email
@@ -47,11 +47,11 @@ Using the `emails` endpoint on the client you can send emails:
 # Sending an email
 email =
   client.emails.send(
-    from: "from@example.com",
-    to: "to@example.com",
-    subject: "Test Email",
-    html: "<b>Html message</b>",
-    text: "Text message")
+    from: 'from@example.com',
+    to: 'to@example.com',
+    subject: 'Test Email',
+    html: '<b>Html message</b>',
+    text: 'Text message')
 ```
 
 ### Users
@@ -67,29 +67,29 @@ users.metadata  # The metadata object containing the total count
 # Create a user with email / password
 user =
   client.users.create(
-    email: "test@user.com",
-    confirmation: "12345",
-    password: "12345",
+    email: 'test@user.com',
+    confirmation: '12345',
+    password: '12345',
     custom_data: {
       age: 32
     })
 
 # Get a users details by the id
 user =
-  client.users.get("user_id")
+  client.users.get('user_id')
 
 # Update a users email or custom_data
 user =
   client.users.update(
-    id: "user_id",
-    email: "test@user.com",
+    id: 'user_id',
+    email: 'test@user.com',
     custom_data: {
       age: 32
     })
 
 # Delete a user by id
 user =
-  client.users.delete("user_id")
+  client.users.delete('user_id')
 ```
 
 ### Sessions
@@ -100,8 +100,8 @@ Using the `sessions` endpoint on the client you can authenticate a user.
 # Create a user with email / password
 user =
   client.sessions.authenticate(
-    email: "test@user.com",
-    password: "12345")
+    email: 'test@user.com',
+    password: '12345')
 ```
 
 ### Forgot Password Flow
@@ -111,14 +111,14 @@ Using the `passwords` endpoint on the client you can perform a forgot password f
 ```ruby
 # Create an forgot password token for the user with the given email address.
 token =
-  client.passwords.forgot_password(email: "test@user.com")
+  client.passwords.forgot_password(email: 'test@user.com')
 
 # Using that token set a new password.
 user =
   client.passwords.set_password(
     forgot_password_token: token.forgot_password_token,
-    confirmation: "123456",
-    password: "123456")
+    confirmation: '123456',
+    password: '123456')
 ```
 
 ### Files
@@ -141,19 +141,19 @@ file =
 
 # Get a file by id
 file =
-  client.files.get("file_id")
+  client.files.get('file_id')
 
 # Delete a file by id
 file =
-  client.files.delete("file_id")
+  client.files.delete('file_id')
 
 # Get a download URL to the file by id
 url =
-  client.files.download_url("file_id")
+  client.files.download_url('file_id')
 
 # Download the file by id into an IO
 io =
-  client.files.download("file_id")
+  client.files.download('file_id')
 ```
 
 ### Images
@@ -176,19 +176,51 @@ image =
 
 # Get a image by id
 image =
-  client.images.get("image_id")
+  client.images.get('image_id')
 
 # Delete a image by id
 image =
-  client.images.delete("image_id")
+  client.images.delete('image_id')
 
 # Get a link to a prcessed version (crop & resize) of the image by id
 url =
   client.images.image_url(i.id,
     crop: Base::Crop.new(width: 100, height: 100, top: 0, left: 0),
     resize: Base::Resize.new(width: 100, height: 100),
-    format: "jpg",
+    format: 'jpg',
     quality: 10)
+```
+
+### Mailing Lists
+
+A project can have many mailing lists which can be managed from the interface.
+
+The `mailingLists` endpoint allows you to programatically subscribe / unsubscribe
+emails to a mailing list and send emails to all subscribes using a single call.
+
+```ruby
+# Subscribe an email to a mailing list.
+list =
+  client.mailing_lists.subscribe(id: 'mailing_list_id', email: 'test@user.com')
+
+# Unsubscribe an email from a mailing list.
+list =
+  client.mailing_lists.unsubscribe(id: 'mailing_list_id', email: 'test@user.com')
+
+# Get a public unsubscribe url for the given mailing list and email which
+# when click unsubscribes a user from the mailing list and redirects to the
+# unsubscribe_redirect_url of the list.
+url =
+  client.mailing_lists.unsubscribe_url(id: 'mailing_list_id', email: 'test@user.com')
+
+# Send the same email to all of the subscribers
+results =
+  client.mailing_lists.send(
+    from: 'from@example.com',
+    id: 'mailing_list_id',
+    subject: 'subject',
+    html: 'HTML',
+    text: 'Text')
 ```
 
 ## Development
