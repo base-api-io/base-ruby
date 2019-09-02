@@ -2,6 +2,36 @@
 
 describe Base do
   context 'Mailing Lists' do
+    context 'Listing Mailing Lists' do
+      it 'returns a list of mailing lists' do
+        WebMock
+          .stub_request(:get, 'https://api.base-api.io/v1/mailing_lists/?page=1&per_page=10')
+          .to_return(
+            body: {
+              items: [{
+                created_at: Time.now.rfc2822,
+                emails: ['test@user.com'],
+                name: 'Test',
+                unsubscribe_redirect_url: '',
+                id: '0'
+              }],
+              metadata: {
+                count: 1
+              }
+            }.to_json
+          )
+
+        client =
+          Base::Client.new(access_token: 'access_token')
+
+        data =
+          client.mailing_lists.list
+
+        data.metadata.count.should eq(1)
+        data.items.length.should eq(1)
+      end
+    end
+
     context 'Subscribing to a mailing list' do
       it 'subscribes the given email' do
         WebMock
@@ -77,6 +107,33 @@ describe Base do
         # rubocop:disable Metrics/LineLength
         url.should eq("https://api.base-api.io/v1/mailing_lists/unsubscribe?token=#{token}")
         # rubocop:enable Metrics/LineLength
+      end
+    end
+
+    context 'Get Mailing List' do
+      it 'gets a mailing lists details' do
+        WebMock
+          .stub_request(:get, 'https://api.base-api.io/v1/mailing_lists/list_id')
+          .to_return(
+            body: {
+              created_at: Time.now.rfc2822,
+              unsubscribe_redirect_url: '',
+              emails: ['test@user.com'],
+              name: 'Test',
+              id: 'id'
+            }.to_json
+          )
+
+        client =
+          Base::Client.new(access_token: 'access_token')
+
+        list =
+          client.mailing_lists.get('list_id')
+
+        list.unsubscribe_redirect_url.should eq('')
+        list.emails.should eq(['test@user.com'])
+        list.name.should eq('Test')
+        list.id.should eq('id')
       end
     end
 
