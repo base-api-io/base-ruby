@@ -11,6 +11,7 @@ require_relative 'endpoints/images'
 require_relative 'endpoints/emails'
 require_relative 'endpoints/users'
 require_relative 'endpoints/files'
+require_relative 'endpoints/forms'
 
 module Base
   # A client containing all the endpoints.
@@ -35,6 +36,9 @@ module Base
 
     # Endpoint for the files.
     attr_reader :files
+
+    # Endpoint for the files.
+    attr_reader :forms
 
     # Initializes a new client with an access_token and optional url.
     def initialize(access_token:, url: 'https://api.base-api.io')
@@ -76,6 +80,12 @@ module Base
 
       @mailing_lists =
         Endpoints::MailingLists.new(
+          access_token: access_token,
+          url: url
+        )
+
+      @forms =
+        Endpoints::Forms.new(
           access_token: access_token,
           url: url
         )
