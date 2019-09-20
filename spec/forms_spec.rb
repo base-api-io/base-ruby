@@ -113,8 +113,17 @@ describe Base do
       client =
         Base::Client.new(access_token: 'access_token')
 
+      tempfile =
+        Tempfile.new
+
       submission =
-        client.forms.submit(id: 'form_id', form: { 'key' => 'value' })
+        client.forms.submit(
+          id: 'form_id',
+          form: {
+            file: tempfile,
+            key: 'value'
+          }
+        )
 
       submission.files.should eq([])
       submission.fields.should eq(nil)

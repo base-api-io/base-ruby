@@ -53,8 +53,23 @@ module Base
       # Submits a new submission for the form with the given ID.
       def submit(id:, form:)
         request do
+          payload =
+            form.each_with_object({}) do |(key, value), memo|
+              memo[key] =
+                case value
+                when File, Tempfile
+                  Faraday::UploadIO.new(
+                    value.path,
+                    File.mime_type?(value),
+                    File.basename(value)
+                  )
+                else
+                  value
+                end
+            end
+
           response =
-            connection.post("#{id}/submit", form)
+            connection.post("#{id}/submit", payload)
 
           parse(response.body)
         end
