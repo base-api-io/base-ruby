@@ -258,10 +258,15 @@ form =
 
 # Submit a form
 submission =
-  client.forms.submit('form_id', key: 'value')
+  client.forms.submit(
+    id: 'form_id',
+    form: {
+      file: File.open('description.txt'),
+      key: 'value'
+    })
 
 # List form submissions
-submissions = client.forms.submissions('form_id', page: 1, per_page: 10)
+submissions = client.forms.submissions(id: 'form_id', page: 1, per_page: 10)
 submissions.items     # The array of forms submissions
 submissions.metadata  # The metadata object containing the total count
 
