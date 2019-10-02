@@ -44,6 +44,11 @@ Just run this command: `gem install base-api-io`
 Using the `emails` endpoint on the client you can send emails:
 
 ```ruby
+# List emails
+emails = client.emails.list(page: 1, per_page: 10)
+emails.items     # The array of emails
+emails.metadata  # The metadata object containing the total count
+
 # Sending an email
 email =
   client.emails.send(
