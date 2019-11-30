@@ -97,6 +97,31 @@ module Base
         end
       end
 
+      # Submits a new submission for the form with the given ID.
+      def update_submission(id:, form_id:, form:)
+        request do
+          payload =
+            form.each_with_object({}) do |(key, value), memo|
+              memo[key] =
+                case value
+                when File, Tempfile
+                  Faraday::UploadIO.new(
+                    value.path,
+                    File.mime_type?(value),
+                    File.basename(value)
+                  )
+                else
+                  value
+                end
+            end
+
+          response =
+            connection.put("#{form_id}/submit/#{id}", payload)
+
+          parse(response.body)
+        end
+      end
+
       # Deletes the submission with the given ID of the form with the given ID.
       def delete_submission(id, submission_id)
         request do
