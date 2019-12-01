@@ -205,8 +205,8 @@ describe Base do
 
       submission =
         client.forms.update_submission(
-          id: 'submission_id',
-          form_id: 'form_id',
+          id: 'form_id',
+          submission_id: 'submission_id',
           form: {
             file: tempfile,
             key: 'value'

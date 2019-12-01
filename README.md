@@ -282,8 +282,8 @@ submission =
 # Update a submission
 submission =
   client.forms.update_submission(
-    id: 'submission_id',
-    form_id: 'form_id',
+    submission_id: 'submission_id',
+    id: 'form_id',
     form: {
       file: File.open('description.txt'),
       key: 'value'

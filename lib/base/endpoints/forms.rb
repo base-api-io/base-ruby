@@ -98,7 +98,7 @@ module Base
       end
 
       # Submits a new submission for the form with the given ID.
-      def update_submission(id:, form_id:, form:)
+      def update_submission(id:, submission_id:, form:)
         request do
           payload =
             form.each_with_object({}) do |(key, value), memo|
@@ -116,7 +116,7 @@ module Base
             end
 
           response =
-            connection.put("#{form_id}/submit/#{id}", payload)
+            connection.put("#{id}/submit/#{submission_id}", payload)
 
           parse(response.body)
         end
